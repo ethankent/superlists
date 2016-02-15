@@ -40,10 +40,11 @@ class NewVisitorTest(LiveServerTestCase):
         # is tying fly-fishing lures)
         inputbox.send_keys('Buy peacock feathers')
 
-        # When she hits enter, the page updates, and now the page lists
-        # "1: Buy peacock feathers" as an item in a to-do list
+        # When she hits enter, she's taken to a new URL,
+        # and now the page lists "1: Buy peacock feathers" as an item in a to-do list table.
         inputbox.send_keys(Keys.ENTER)
-
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_text_in_list_of_table_rows('1: Buy peacock feathers')
 
         # There is still a text box inviting her to add another item. She
@@ -56,11 +57,38 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_text_in_list_of_table_rows('1: Buy peacock feathers')
         self.check_for_text_in_list_of_table_rows('2: Use peacock feathers to make a fly')
 
-        # Edith wonders whether the site will remember her list. Then she sees
-        # that the site has generated a unique URL for her -- there is some
-        # explanatory text to that effect.
+        # Now a new user, Francis, arrives at the site.
+
+        ## Let's use a new browser, so that Edith's cookies-and-whatnot won't show up.
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Francis loads up the homepage, and sees no trace of Edith's info.
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('make a fly', page_text)
+
+        # Francis enters an item, thereby starting a new list.
+        # Maybe a bit less interesting than Edith...
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+
+        # He gets his own unique URL.
+        francis_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
+        self.assertNotEqual(edith_list_url, francis_list_url)
+
+        # Still no sign of Edith's list
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertIn('Buy milk', page_text)
+
+        # Satisfied, both go back to sleep
+
         self.fail('Finish the test!')
 
-        # She visits that URL - her to-do list is still there.
-
-        # Satisfied, she goes back to sleep
+        # FIXME - Adjust model so that items are associated with different lists
+        # FIXME - Add unique URLs for each list
+        # FIXME - Add a URL for creating a new list via POST
+        # FIXME - Add URLs for adding a new item to an existing list via POST
