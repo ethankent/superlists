@@ -86,5 +86,3 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Buy milk', page_text)
 
         # Satisfied, both go back to sleep
-
-        # FIXME - Refactor away some duplication in urls.py
