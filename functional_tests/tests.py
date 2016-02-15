@@ -81,14 +81,10 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotEqual(edith_list_url, francis_list_url)
 
         # Still no sign of Edith's list
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
 
         # Satisfied, both go back to sleep
 
-        self.fail('Finish the test!')
-
-        # FIXME - Adjust model so that items are associated with different lists
-        # FIXME - Add unique URLs for each list
-        # FIXME - Add a URL for creating a new list via POST
-        # FIXME - Add URLs for adding a new item to an existing list via POST
+        # FIXME - Refactor away some duplication in urls.py
