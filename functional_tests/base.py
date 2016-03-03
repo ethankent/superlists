@@ -4,6 +4,7 @@ from selenium import webdriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 # FIXME - Comments should all be writting with effective grammar and punctuation.
+# FIXME - Remove hardcoded URLs from views.py
 
 
 class FunctionalTest(StaticLiveServerTestCase):
