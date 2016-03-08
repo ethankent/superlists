@@ -5,6 +5,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 # FIXME - Comments should all be writting with effective grammar and punctuation.
 # FIXME - Remove hardcoded URLs from views.py
+# FIXME - Remove hardcoded URL from forms in list.html and home.html
 
 
 class FunctionalTest(StaticLiveServerTestCase):
